@@ -1,0 +1,42 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.card {
+    background-color: #2d2d2d;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.button {
+    background-color: #ff0000;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: #cc0000;
+}
+
+.time-slot {
+    background-color: #333;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.time-slot:hover {
+    background-color: #444;
+}
