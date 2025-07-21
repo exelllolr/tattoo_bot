@@ -9,7 +9,6 @@ from bot.services.notification_service import schedule_notifications
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
-logging.basicConfig(level=logging.DEBUG)
 
 async def main():
     # Initialize bot and dispatcher
