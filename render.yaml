@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: tattoo-booking-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn bot.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: WEBAPP_URL
+        value: https://tattoo-bot.vercel.app
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tattoo-booking-db
+          property: connectionString
+  - type: worker
+    name: tattoo-booking-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m bot.main
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: WEBAPP_URL
+        value: https://tattoo-bot.vercel.app
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tattoo-booking-db
+          property: connectionString
+databases:
+  - name: tattoo-booking-db
+    databaseName: tattoo_booking
+    user: tattoo_user

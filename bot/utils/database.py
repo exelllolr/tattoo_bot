@@ -1,16 +1,15 @@
-import sqlite3
+import psycopg2
 import asyncio
 from contextlib import asynccontextmanager
-from datetime import datetime
+import os
 
 async def init_db():
-    conn = sqlite3.connect('tattoo_booking.db')
+    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
     cursor = conn.cursor()
     
-    # Create masters table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS masters (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             experience INTEGER NOT NULL,
             description TEXT,
@@ -19,10 +18,9 @@ async def init_db():
         )
     ''')
     
-    # Create appointments table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS appointments (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             user_id INTEGER NOT NULL,
             master_id INTEGER NOT NULL,
             date TEXT NOT NULL,
@@ -32,23 +30,23 @@ async def init_db():
         )
     ''')
     
-    # Create messages table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             user_id INTEGER NOT NULL,
             master_id INTEGER NOT NULL,
             text TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (master_id) REFERENCES masters(id)
         )
     ''')
     
-    # Insert test data
     cursor.execute('''
-        INSERT OR IGNORE INTO masters (name, experience, description, avatar_url, portfolio_urls) VALUES
+        INSERT INTO masters (name, experience, description, avatar_url, portfolio_urls)
+        VALUES
         ('Алексей "Скорпион"', 7, 'Специализируюсь на реализме и черно-серых татуировках. Хочу попробовать крупные цветные проекты в стиле акварели.', 'https://example.com/avatar1.jpg', '["https://example.com/portfolio1.jpg","https://example.com/portfolio2.jpg","https://example.com/portfolio3.jpg"]'),
         ('Екатерина "Луна"', 5, 'Работаю в стилях графика и олдскул. Экспериментирую с нео-традишнл.', 'https://example.com/avatar2.jpg', '["https://example.com/portfolio4.jpg","https://example.com/portfolio5.jpg"]')
+        ON CONFLICT DO NOTHING
     ''')
     
     conn.commit()
@@ -56,7 +54,7 @@ async def init_db():
 
 @asynccontextmanager
 async def get_db():
-    conn = sqlite3.connect('tattoo_booking.db')
+    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
     try:
         yield conn
     finally:

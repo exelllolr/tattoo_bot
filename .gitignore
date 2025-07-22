@@ -1,1 +1,5 @@
 .vercel
+pycache/
+*.pyc
+*.db
+.envS

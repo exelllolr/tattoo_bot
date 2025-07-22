@@ -3,7 +3,7 @@ const TelegramWebApp = window.Telegram.WebApp;
 TelegramWebApp.ready();
 
 async function loadMasters() {
-    const response = await fetch('/api/masters');
+    const response = await fetch('https://tattoo-booking-api.onrender.com/api/masters');
     const masters = await response.json();
     
     const content = document.getElementById('content');
@@ -26,7 +26,7 @@ async function loadMasters() {
 async function showBooking(masterId) {
     const today = new Date();
     const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    const response = await fetch(`/api/slots?master_id=${masterId}&date=${date}`);
+    const response = await fetch(`https://tattoo-booking-api.onrender.com/api/slots?master_id=${masterId}&date=${date}`);
     const slots = await response.json();
     
     const content = document.getElementById('content');
@@ -41,7 +41,7 @@ async function showBooking(masterId) {
 }
 
 async function bookSlot(masterId, date, time) {
-    const response = await fetch('/api/book', {
+    const response = await fetch('https://tattoo-booking-api.onrender.com/api/book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
